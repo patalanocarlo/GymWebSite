@@ -5,6 +5,8 @@ import PassionIron.Project.GymWebSite.Repository.UtenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UtenteService {
 
@@ -17,5 +19,8 @@ public class UtenteService {
     }
     public Utente findByEmail(String email){
         return utenteRepository.findByEmail(email);
+    }
+    public Optional<Utente> findById(Long id) {
+        return utenteRepository.findById(id);
     }
 }
