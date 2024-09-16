@@ -19,6 +19,7 @@ public class Utente implements UserDetails {
     private Long id;
     private String nome;
     private String cognome;
+    private String username;
     private String email;
     private int telefonoCellulare;
     private String password;

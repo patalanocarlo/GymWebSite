@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -25,33 +28,45 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public String register(@RequestBody RegisterRequestPayload registerRequest) {
-        // Verifica se l'email è già registrata
+    public Map<String, String> register(@RequestBody RegisterRequestPayload registerRequest) {
+        Map<String, String> response = new HashMap<>();
+
         if (utenteService.findByEmail(registerRequest.getEmail()) != null) {
-            return "Email già in uso.";
+            response.put("message", "Email già in uso.");
+            return response;
         }
 
         Utente utente = new Utente();
         utente.setNome(registerRequest.getNome());
         utente.setCognome(registerRequest.getCognome());
+        utente.setUsername(registerRequest.getUsername());
         utente.setEmail(registerRequest.getEmail());
         utente.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
 
-
         utenteService.createUtente(utente);
 
-        return "Registrazione completata.";
+        response.put("message", "Registrazione completata.");
+        return response;
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequestPayload loginRequest) {
-        Utente utente = utenteService.findByEmail(loginRequest.getEmail());
+    public Map<String, Object> login(@RequestBody LoginRequestPayload loginRequest) {
+        Map<String, Object> response = new HashMap<>();
+
+        // Cerca l'utente per username invece che per email
+        Utente utente = utenteService.findByUsername(loginRequest.getUsername());
         if (utente != null && passwordEncoder.matches(loginRequest.getPassword(), utente.getPassword())) {
-            // Genera il token JWT
             String token = jwtTools.createToken(utente);
-            return "Bearer " + token;
+            String username = utente.getUsername().split("@")[0];
+            response.put("token", "Bearer " + token);
+            response.put("user", Map.of("username", username));
         } else {
-            return "Credenziali non valide.";
+            response.put("message", "Credenziali non valide.");
         }
+
+        return response;
     }
+
+
 }
+

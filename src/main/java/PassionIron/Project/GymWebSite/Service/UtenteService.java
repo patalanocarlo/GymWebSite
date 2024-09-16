@@ -14,6 +14,9 @@ public class UtenteService {
     private UtenteRepository utenteRepository;
 
 
+    public Utente findByUsername(String username) {
+        return utenteRepository.findByUsername(username);
+    }
     public Utente createUtente (Utente utente){
         return utenteRepository.save(utente);
     }

@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 public class RegisterRequestPayload {
     private String nome;
+    private String username;
     private String cognome;
     private String email;
     private String password;
