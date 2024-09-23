@@ -24,9 +24,9 @@ public class Utente implements UserDetails {
     private int telefonoCellulare;
     private String password;
 
-    @ManyToOne
-    @JoinColumn(name = "abbonamento_id")
+    @OneToOne
     private Abbonamento abbonamento;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // Restituisce solo il ruolo di base "ROLE_CLIENT"

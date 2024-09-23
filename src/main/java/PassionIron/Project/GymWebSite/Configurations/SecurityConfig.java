@@ -34,7 +34,7 @@ public class SecurityConfig {
         httpSecurity.sessionManagement(http -> http.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         httpSecurity.cors(http -> {});
         httpSecurity.authorizeHttpRequests(http -> {
-            http.requestMatchers("/auth/**" ,"/user/**").permitAll();
+            http.requestMatchers("/auth/**", "/user/**", "/api/abbonamenti/**", "/api/pagamenti/checkout").permitAll();
             http.anyRequest().authenticated();
         });
 
@@ -47,14 +47,13 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Assicurati che l'URL sia corretto
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(true);
+        configuration.setAllowCredentials(true); // Necessario se si inviano cookie o credenziali
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

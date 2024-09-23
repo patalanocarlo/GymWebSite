@@ -38,8 +38,9 @@ public class JWTFilter extends OncePerRequestFilter {
         String jwt = null;
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            jwt = authorizationHeader.substring(7);
+            jwt = authorizationHeader.substring(7).trim();
             userId = jwtTools.extractIdFromToken(jwt);
+            System.out.println("JWT: " + jwt);
         }
 
         if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -55,6 +56,7 @@ public class JWTFilter extends OncePerRequestFilter {
                         userDetails, null, userDetails.getAuthorities());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
             } catch (Exception e) {
                 System.out.println("Invalid token: " + e.getMessage());
             }

@@ -123,7 +123,6 @@
 			<artifactId>stripe-java</artifactId>
 			<version>26.4.0</version>
 		</dependency>
-
 		<!-- https://mvnrepository.com/artifact/com.konghq/unirest-object-mappers-gson -->
 		<dependency>
 			<groupId>com.konghq</groupId>

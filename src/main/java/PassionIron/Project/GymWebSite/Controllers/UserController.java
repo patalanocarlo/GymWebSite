@@ -1,7 +1,10 @@
 package PassionIron.Project.GymWebSite.Controllers;
 
 import PassionIron.Project.GymWebSite.Configurations.JWTTools;
+import PassionIron.Project.GymWebSite.Entities.Abbonamento;
 import PassionIron.Project.GymWebSite.Entities.Utente;
+import PassionIron.Project.GymWebSite.Repository.AbbonamentoRepository;
+import PassionIron.Project.GymWebSite.Repository.UtenteRepository;
 import PassionIron.Project.GymWebSite.Service.UtenteService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +17,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-
+    @Autowired
+    private UtenteRepository utenteRepository;
+    @Autowired
+    private AbbonamentoRepository abbonamentoRepository;
     @Autowired
     private UtenteService utenteService;
     @Autowired
@@ -51,6 +57,18 @@ public class UserController {
             return "{\"error\": \"Token non valido\"}";
         }
     }
+    @PutMapping("/{id}/abbonamento")
+    public Utente updateAbbonamento(@PathVariable Long id, @RequestParam Long abbonamentoId) {
+        Utente utente = utenteRepository.findById(id).orElse(null);
+        if (utente != null) {
 
+            Abbonamento abbonamento = abbonamentoRepository.findById(abbonamentoId).orElse(null);
+            if (abbonamento != null) {
+                utente.setAbbonamento(abbonamento);
+                return utenteRepository.save(utente);
+            }
+        }
+        return null;
+    }
     }
 
